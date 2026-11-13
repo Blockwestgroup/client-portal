@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Client Link Builder</title>
+  <meta name="robots" content="noindex" />
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    @font-face { font-family: "Magnolia"; src: url("assets/Magnolia.woff2") format("woff2"); font-display: swap; }
+    :root { --paper:#faf8f5; --sand:#efe7e0; --driftwood:#907d71; --deep:#74635a; --ink:#1f1c1a; --soft:#6b5f57; --line:#e2d9d1; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--paper); color: var(--ink); font-family: Lato, system-ui, sans-serif; line-height: 1.5; padding: 28px 16px 60px; }
+    main { max-width: 560px; margin: 0 auto; }
+    h1 { font-family: "Magnolia", Georgia, serif; font-style: normal; font-weight: 400; color: var(--deep); font-size: 2rem; }
+    p.lede { color: var(--soft); margin: 4px 0 22px; font-size: .92rem; }
+    label { display: block; font-weight: 700; font-size: .85rem; margin-top: 16px; }
+    label small { display: block; font-weight: 400; color: var(--soft); font-size: .78rem; }
+    input, select { width: 100%; margin-top: 6px; padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: #fff; font: inherit; }
+    .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .out { margin-top: 26px; background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
+    .out code { display: block; word-break: break-all; font-size: .78rem; color: var(--soft); background: var(--sand); padding: 10px; border-radius: 8px; margin-top: 8px; }
+    .btns { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 12px; }
+    .btns a, .btns button { display: block; text-align: center; padding: 11px 6px; border-radius: 999px; font: inherit; font-weight: 700; font-size: .82rem; text-decoration: none; cursor: pointer; border: 1px solid var(--driftwood); color: var(--deep); background: none; }
+    .btns .dark { background: var(--deep); color: #fff; border-color: var(--deep); }
+    .rem { border-top: 1px solid var(--line); padding: 10px 0; font-size: .84rem; }
+    .rem b { display: block; font-size: .86rem; }
+    .rem span { color: var(--soft); }
+    .rem button { margin-top: 6px; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--driftwood); background: none; color: var(--deep); font: inherit; font-weight: 700; font-size: .78rem; cursor: pointer; }
+    .help { margin-top: 28px; font-size: .84rem; color: var(--soft); }
+    .help h2 { font-size: .9rem; color: var(--ink); margin: 16px 0 4px; }
+    .help ol { padding-left: 18px; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Client link builder</h1>
+  <p class="lede">For Melissa only. Fill this in, then text the link to your client. Update the stage and send a fresh link any time.</p>
+
+  <label>My clients <small>Pick a saved client to update their stage, or start a new one. Saved on this device only.</small>
+    <select id="saved"><option value="">+ New client</option></select>
+  </label>
+
+  <label>Client first name(s) <small>Example: Sam &amp; Jordan</small><input id="n" autocomplete="off" /></label>
+
+  <div class="two">
+    <label>Client type
+      <select id="t">
+        <option value="buyer">Buyer</option>
+        <option value="seller">Seller</option>
+        <option value="both">Buying + selling</option>
+        <option value="past">Past client</option>
+      </select>
+    </label>
+    <label>Closing date <small>Optional</small><input id="close" type="date" /></label>
+  </div>
+
+  <div class="two" id="stage-row">
+    <label><span id="s-label">Buyer stage</span><select id="s"></select></label>
+    <label id="s2-wrap" hidden>Seller stage<select id="s2"></select></label>
+  </div>
+
+  <label>Key dates <small>Optional. These show on their Calendar page, go on their phone with reminders, and get reminder notifications.</small></label>
+  <div class="two">
+    <label style="margin-top:6px">Inspection deadline<input id="insp" type="date" /></label>
+    <label style="margin-top:6px">Appraisal deadline<input id="appr" type="date" /></label>
+    <label style="margin-top:6px">Loan approval deadline<input id="loan" type="date" /></label>
+    <label style="margin-top:6px">Final walk-through<input id="walk" type="date" /></label>
+  </div>
+
+  <label>Google Drive folder link <small>Share the folder with the client's email first, then paste its link here.</small><input id="d" placeholder="https://drive.google.com/drive/folders/..." /></label>
+
+  <label>Deal calendar address <small>Optional. The "Secret address in iCal format" from the client's Google Calendar (see steps below).</small><input id="c" placeholder="https://calendar.google.com/calendar/ical/.../basic.ics" /></label>
+
+  <div class="out">
+    <b>Their personal link</b>
+    <code id="link"></code>
+    <div class="btns">
+      <button id="copy" class="dark">Copy link</button>
+      <a id="text" href="#">Text it</a>
+      <a id="open" href="#" target="_blank" rel="noopener">Preview</a>
+    </div>
+    <button id="save" class="dark" style="width:100%;margin-top:8px;padding:11px;border-radius:999px;border:0;background:var(--driftwood);color:#fff;font:inherit;font-weight:700;cursor:pointer">Save client</button>
+  </div>
+
+  <div class="out">
+    <b>Deal update notification</b>
+    <p style="font-size:.8rem;color:var(--soft);margin-top:2px">Send one for every update. Tapping it opens their app with the latest info.</p>
+    <label style="margin-top:10px">What changed?
+      <select id="ut">
+        <option value="stage">Moved to a new step</option>
+        <option value="doc">New document in their folder</option>
+        <option value="date">A date was added or changed</option>
+        <option value="note">Something else (write your own)</option>
+      </select>
+    </label>
+    <label>Title<input id="pt" /></label>
+    <label>Message<input id="pm" /></label>
+    <label>Client code <small>OneSignal → New Push → Audience: send to this External ID</small><input id="pi" readonly /></label>
+    <div class="btns" style="grid-template-columns:1fr 1fr">
+      <button id="copy-msg">Copy message</button>
+      <a class="dark" href="https://dashboard.onesignal.com/" target="_blank" rel="noopener">Open OneSignal</a>
+    </div>
+  </div>
+
+  <div class="out" id="rem-box" hidden>
+    <b>Date reminders to schedule</b>
+    <p style="font-size:.8rem;color:var(--soft);margin-top:2px">Schedule each one once in OneSignal (New Push → Schedule → "Begin sending at a particular time"). They go out at 9 AM the day before.</p>
+    <div id="rem-list"></div>
+  </div>
+
+  <div class="help">
+    <h2>Set up a client's documents</h2>
+    <ol>
+      <li>In Google Drive, make a folder named after the client (one per client).</li>
+      <li>Right-click it → Share → add the client's email as <b>Viewer</b>. Keep "General access" set to <b>Restricted</b>.</li>
+      <li>Copy the folder link and paste it above.</li>
+    </ol>
+    <h2>Set up a deal calendar (optional)</h2>
+    <ol>
+      <li>In Google Calendar, click + next to "Other calendars" → Create new calendar → name it, for example "Sam &amp; Jordan – 123 Main".</li>
+      <li>Add the contract deadlines to that calendar.</li>
+      <li>Open its Settings → "Integrate calendar" → copy <b>Secret address in iCal format</b> and paste it above.</li>
+    </ol>
+    <p style="margin-top:10px">The link holds only what's on this page, never addresses or documents. Anyone with the link sees the client's first name and stage, and the documents still need their Google login.</p>
+  </div>
+</main>
+<script>
+  var BUY = ["Get pre-approved","Home search + showings","Offer accepted","Earnest money","Inspection","Appraisal","Loan approval","Final walk-through","Closing day"];
+  var SELL = ["Pricing + prep","Staging + photos","Live on the market","Offer accepted","Inspection","Appraisal","Buyer's loan approval","Move out + walk-through","Closing day"];
+  var $ = function (id) { return document.getElementById(id); };
+  function fill(sel, list) { sel.innerHTML = list.map(function (x, i) { return '<option value="' + (i + 1) + '">' + (i + 1) + ". " + x + "</option>"; }).join(""); }
+  function encode(obj) { return btoa(unescape(encodeURIComponent(JSON.stringify(obj)))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); }
+  var DKEYS = ["insp", "appr", "loan", "walk"];
+  var base = location.href.replace(/setup\.html.*$/, "");
+
+  function syncStages() {
+    var t = $("t").value;
+    $("stage-row").hidden = t === "past";
+    $("s2-wrap").hidden = t !== "both";
+    $("s-label").textContent = t === "seller" ? "Seller stage" : "Buyer stage";
+    fill($("s"), t === "seller" ? SELL : BUY);
+    fill($("s2"), SELL);
+  }
+  // Saved clients (this device only)
+  function loadAll() { try { return JSON.parse(localStorage.getItem("bw-clients") || "{}"); } catch (e) { return {}; } }
+  function saveAll(all) { try { localStorage.setItem("bw-clients", JSON.stringify(all)); } catch (e) {} }
+  function newCode() { return "bw-" + Math.random().toString(36).slice(2, 8) + Date.now().toString(36).slice(-4); }
+  var code = newCode();
+  function listSaved(sel) {
+    var all = loadAll();
+    $("saved").innerHTML = '<option value="">+ New client</option>' + Object.keys(all).map(function (k) {
+      return '<option value="' + k + '"' + (k === sel ? " selected" : "") + ">" + all[k].n + " (" + all[k].t + ")</option>";
+    }).join("");
+  }
+  $("saved").addEventListener("change", function () {
+    var o = loadAll()[this.value];
+    if (!o) { code = newCode(); ["n", "close", "d", "c"].concat(DKEYS).forEach(function (k) { $(k).value = ""; }); $("t").value = "buyer"; syncStages(); build(); return; }
+    code = o.i; $("n").value = o.n || ""; $("t").value = o.t; syncStages();
+    if (o.s) $("s").value = o.s; if (o.s2) $("s2").value = o.s2;
+    $("close").value = o.close || ""; $("d").value = o.d || ""; $("c").value = o.c || "";
+    DKEYS.forEach(function (k) { $(k).value = (o.dt && o.dt[k]) || ""; });
+    build();
+  });
+  $("save").addEventListener("click", function () {
+    var o = current(); if (!o.n) { alert("Add the client's name first."); return; }
+    var all = loadAll(); all[o.i] = o; saveAll(all); listSaved(o.i);
+    $("save").textContent = "Saved!"; setTimeout(function () { $("save").textContent = "Save client"; }, 1500);
+  });
+
+  function current() {
+    var t = $("t").value, o = { n: $("n").value.trim(), t: t, i: code };
+    if (t !== "past") o.s = +$("s").value;
+    if (t === "both") o.s2 = +$("s2").value;
+    if ($("close").value) o.close = $("close").value;
+    if ($("d").value.trim()) o.d = $("d").value.trim();
+    if ($("c").value.trim()) o.c = $("c").value.trim();
+    var dt = {}; DKEYS.forEach(function (k) { if ($(k).value) dt[k] = $(k).value; });
+    if (Object.keys(dt).length) o.dt = dt;
+    return o;
+  }
+
+  function build() {
+    var t = $("t").value, o = current();
+    var url = base + "?k=" + encode(o);
+    $("link").textContent = url;
+    $("open").href = url;
+    var msg = "Hi " + (o.n || "there") + "! Here's your personal home portal with your documents, dates and next steps. Tap it and choose \"Add to Home Screen\" to keep it handy: " + url;
+    $("text").href = "sms:?&body=" + encodeURIComponent(msg);
+    // Notification text for the current stage
+    var who = o.n || "there", step;
+    if (t === "past") step = null;
+    else step = (t === "seller" ? SELL : BUY)[(o.s || 1) - 1];
+    var ut = $("ut").value;
+    if (ut === "stage") {
+      $("pt").value = step ? (step === "Closing day" ? "It's closing day! 🎉" : "Deal update: " + step) : "A note from Melissa";
+      $("pm").value = step
+        ? (step === "Closing day" ? "Congratulations, " + who + "! Today's the day. Tap for your closing checklist." : "Great news, " + who + "! We just moved to " + step + ". Tap to see your next step.")
+        : "Hi " + who + "! Tap to open your home portal.";
+    } else if (ut === "doc") {
+      $("pt").value = "New document for you"; $("pm").value = "Hi " + who + "! I just added a document to your folder. Tap to take a look.";
+    } else if (ut === "date") {
+      $("pt").value = "Your dates were updated"; $("pm").value = "Hi " + who + "! I updated your deal dates. Tap to see them and add them to your phone.";
+    } else if (!$("pt").dataset.typed) {
+      $("pt").value = "A note from Melissa"; $("pm").value = "Hi " + who + "! ";
+    }
+    $("pi").value = code;
+    // Date reminders (9 AM the day before)
+    var NAMES = { insp: "Inspection deadline", appr: "Appraisal deadline", loan: "Loan approval deadline", walk: "Final walk-through", close: "Closing day" };
+    var rems = [];
+    DKEYS.concat(["close"]).forEach(function (k) {
+      var v = (o.dt && o.dt[k]) || (k === "close" ? o.close : ""); if (!v || t === "past") return;
+      var p = v.split("-"), d = new Date(+p[0], +p[1] - 1, +p[2] - 1);
+      var title = k === "close" ? "Closing is tomorrow! 🎉" : "Reminder: " + NAMES[k] + " is tomorrow";
+      var msg = k === "close" ? "Big day tomorrow, " + who + "! Bring your photo ID. Tap for your checklist." : "Hi " + who + "! Your " + NAMES[k].toLowerCase() + " is tomorrow. Tap to see what's next.";
+      rems.push({ when: d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }) + ", 9:00 AM", title: title, msg: msg });
+    });
+    $("rem-box").hidden = !rems.length;
+    $("rem-list").innerHTML = rems.map(function (r, i) {
+      return '<div class="rem"><b>' + r.title + '</b><span>Send ' + r.when + '</span><br>' + r.msg + '<br><button data-i="' + i + '">Copy</button></div>';
+    }).join("");
+    window._rems = rems; window._url = url;
+    return url;
+  }
+  $("t").addEventListener("change", function () { syncStages(); build(); });
+  document.querySelectorAll("#n,#close,#d,#c,#s,#s2,#insp,#appr,#loan,#walk").forEach(function (el) { el.addEventListener("input", build); });
+  $("ut").addEventListener("change", function () { delete $("pt").dataset.typed; build(); });
+  $("pt").addEventListener("input", function () { this.dataset.typed = 1; });
+  $("rem-list").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return; var r = window._rems[+b.dataset.i];
+    navigator.clipboard.writeText(r.title + "\n" + r.msg + "\nSend: " + r.when + "\nLaunch URL: " + window._url).then(function () { b.textContent = "Copied!"; setTimeout(function () { b.textContent = "Copy"; }, 1500); });
+  });
+  $("copy").addEventListener("click", function () {
+    var url = build();
+    navigator.clipboard.writeText(url).then(function () { $("copy").textContent = "Copied!"; setTimeout(function () { $("copy").textContent = "Copy link"; }, 1500); });
+  });
+  $("copy-msg").addEventListener("click", function () {
+    navigator.clipboard.writeText($("pt").value + "\n" + $("pm").value + "\nLaunch URL: " + build()).then(function () {
+      $("copy-msg").textContent = "Copied!"; setTimeout(function () { $("copy-msg").textContent = "Copy message"; }, 1500);
+    });
+  });
+  listSaved(); syncStages(); build();
+</script>
+</body>
+</html>

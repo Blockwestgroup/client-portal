@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Block West Client Portal</title>
+  <meta name="description" content="Your home, your documents and your next steps with Melissa Patterson, Block West Group at eXp Realty." />
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#faf8f5" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Block West" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="assets/bw-monogram.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="assets/icon-180.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <style>
+    @font-face { font-family: "Magnolia"; src: url("assets/Magnolia.woff2") format("woff2"); font-display: swap; }
+    :root {
+      --paper: #faf8f5;
+      --card: #ffffff;
+      --sand: #efe7e0;
+      --driftwood: #907d71;
+      --driftwood-deep: #74635a;
+      --driftwood-dark: #5e5048;
+      --ink: #1f1c1a;
+      --ink-soft: #6b5f57;
+      --line: #e2d9d1;
+      --done: #7c8f6e;
+      --script: "Magnolia", Georgia, serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    [hidden] { display: none !important; }
+    html, body { background: var(--paper); }
+    body {
+      color: var(--ink);
+      font-family: "Lato", system-ui, -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+    a { color: inherit; }
+    button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+
+    .wrap { max-width: 520px; margin: 0 auto; padding: calc(20px + env(safe-area-inset-top)) 16px calc(110px + env(safe-area-inset-bottom)); }
+
+    /* Header */
+    header { display: flex; flex-direction: column; align-items: center; gap: 10px; padding-bottom: 16px; border-bottom: 1px solid var(--line); text-align: center; }
+    header img { height: 28px; width: auto; max-width: 70%; }
+    header .who { font-size: 0.66rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-soft); line-height: 1.6; }
+    header .who b { color: var(--ink); font-weight: 700; }
+
+    h1 { font-family: var(--script); font-style: normal; font-weight: 400; font-size: 2.1rem; line-height: 1.15; color: var(--driftwood-deep); margin: 26px 0 4px; }
+    h2 { font-family: var(--script); font-style: normal; font-weight: 400; font-size: 1.45rem; color: var(--driftwood-deep); margin: 30px 0 12px; }
+    .lede { color: var(--ink-soft); font-size: 0.95rem; }
+    .eyebrow { font-size: 0.64rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ink-soft); }
+
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px; margin-top: 12px; }
+
+    /* Quick action grid */
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+    .tile {
+      display: flex; flex-direction: column; gap: 10px; align-items: flex-start;
+      background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+      padding: 16px 14px; text-decoration: none; text-align: left; min-height: 104px;
+      transition: border-color .2s, transform .2s;
+    }
+    .tile:active { transform: scale(0.98); }
+    .tile:hover { border-color: var(--driftwood); }
+    .tile svg { width: 24px; height: 24px; stroke: var(--driftwood); }
+    .tile b { font-weight: 700; font-size: 0.92rem; }
+    .tile span { font-size: 0.78rem; color: var(--ink-soft); line-height: 1.35; }
+    .tile.primary { background: var(--driftwood-deep); border-color: var(--driftwood-deep); color: #fff; }
+    .tile.primary svg { stroke: #fff; }
+    .tile.primary span { color: #efe7e0; }
+    .tile.off { opacity: .55; }
+
+    /* Buttons */
+    .btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 14px; border-radius: 999px; text-decoration: none; font-weight: 700; font-size: 0.9rem; margin-top: 10px; }
+    .btn svg { width: 18px; height: 18px; }
+    .btn-dark { background: var(--driftwood-deep); color: #fff; }
+    .btn-dark svg { stroke: #fff; }
+    .btn-line { border: 1px solid var(--driftwood); color: var(--driftwood-dark); }
+    .btn-line svg { stroke: var(--driftwood); }
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .row2 .btn { margin-top: 10px; }
+
+    /* Progress */
+    .progress-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+    .progress-head b { font-size: 1rem; }
+    .bar { height: 6px; background: var(--sand); border-radius: 99px; margin-top: 12px; overflow: hidden; }
+    .bar i { display: block; height: 100%; background: var(--driftwood); border-radius: 99px; }
+    .countdown { margin-top: 12px; font-size: 0.86rem; color: var(--ink-soft); }
+    .countdown strong { color: var(--ink); }
+
+    ol.steps { list-style: none; margin-top: 8px; }
+    ol.steps li { position: relative; padding: 0 0 22px 38px; }
+    ol.steps li::before { content: ""; position: absolute; left: 11px; top: 26px; bottom: 0; width: 1px; background: var(--line); }
+    ol.steps li:last-child::before { display: none; }
+    .dot { position: absolute; left: 0; top: 2px; width: 23px; height: 23px; border-radius: 50%; border: 1.5px solid var(--line); background: var(--paper); display: grid; place-items: center; font-size: 0.7rem; color: var(--ink-soft); }
+    li.done .dot { background: var(--done); border-color: var(--done); color: #fff; }
+    li.now .dot { background: var(--driftwood-deep); border-color: var(--driftwood-deep); color: #fff; box-shadow: 0 0 0 5px var(--sand); }
+    ol.steps h3 { font-size: 0.95rem; font-weight: 700; }
+    li.done h3 { color: var(--ink-soft); font-weight: 400; }
+    ol.steps p { font-size: 0.85rem; color: var(--ink-soft); margin-top: 2px; }
+    li:not(.now) p.todo { display: none; }
+    p.todo { color: var(--ink) !important; background: var(--sand); padding: 8px 10px; border-radius: 8px; margin-top: 8px !important; }
+
+    /* Lists */
+    .list { margin-top: 10px; }
+    .item { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+    .item:last-child { border-bottom: 0; }
+    .item .meta { flex: 1; min-width: 0; }
+    .item .meta b { display: block; font-size: 0.95rem; }
+    .item .meta span { font-size: 0.8rem; color: var(--ink-soft); }
+    .chip { display: inline-block; font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--driftwood-dark); background: var(--sand); padding: 3px 8px; border-radius: 99px; margin-bottom: 4px; }
+    .icon-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; text-decoration: none; flex-shrink: 0; }
+    .icon-btn svg { width: 18px; height: 18px; stroke: var(--driftwood-deep); }
+    .key-dates { list-style: none; margin: 14px 0 4px; border-top: 1px solid var(--line, #e2d9d1); }
+    .key-dates li { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line, #e2d9d1); font-size: .92rem; }
+    .key-dates small { display: block; color: var(--ink-soft); font-size: .8rem; }
+    .key-dates b { color: var(--driftwood-deep); font-size: .85rem; white-space: nowrap; }
+    .soon { font-size: 0.72rem; color: var(--ink-soft); }
+
+    details { border-bottom: 1px solid var(--line); }
+    details:last-child { border-bottom: 0; }
+    summary { list-style: none; padding: 14px 0; font-weight: 700; font-size: 0.93rem; display: flex; justify-content: space-between; cursor: pointer; }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: "+"; color: var(--driftwood); font-weight: 400; font-size: 1.2rem; line-height: 1; }
+    details[open] summary::after { content: "–"; }
+    details > div { padding: 0 0 16px; font-size: 0.88rem; color: var(--ink-soft); }
+    details ul { padding-left: 18px; margin-top: 6px; }
+    details li { margin-top: 4px; }
+
+    .check { display: flex; gap: 12px; align-items: flex-start; padding: 11px 0; border-bottom: 1px solid var(--line); font-size: 0.9rem; cursor: pointer; }
+    .check:last-child { border-bottom: 0; }
+    .check input { appearance: none; width: 20px; height: 20px; border: 1.5px solid var(--driftwood); border-radius: 6px; flex-shrink: 0; margin-top: 1px; display: grid; place-items: center; }
+    .check input:checked { background: var(--driftwood); }
+    .check input:checked::after { content: "✓"; color: #fff; font-size: 0.75rem; }
+    .check input:checked + span { color: var(--ink-soft); text-decoration: line-through; }
+
+    .seg { display: flex; background: var(--sand); border-radius: 99px; padding: 4px; margin-top: 16px; }
+    .seg button { flex: 1; padding: 9px 4px; border-radius: 99px; font-size: 0.8rem; color: var(--ink-soft); }
+    .seg button.on { background: var(--card); color: var(--ink); font-weight: 700; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+
+    .note { font-size: 0.8rem; color: var(--ink-soft); margin-top: 10px; }
+    footer { text-align: center; font-size: 0.7rem; color: var(--ink-soft); margin-top: 40px; line-height: 1.7; }
+
+    /* Bottom tab bar */
+    nav.tabs {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
+      background: rgba(250, 248, 245, 0.96); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      border-top: 1px solid var(--line);
+      padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
+    }
+    nav.tabs .in { max-width: 520px; margin: 0 auto; display: flex; }
+    nav.tabs a { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 0; font-size: 0.64rem; text-decoration: none; color: var(--ink-soft); }
+    nav.tabs svg { width: 22px; height: 22px; stroke: currentColor; }
+    nav.tabs a.on { color: var(--driftwood-deep); font-weight: 700; }
+
+    /* Add to Home Screen sheet */
+    .sheet-bg { position: fixed; inset: 0; background: rgba(31, 28, 26, 0.35); z-index: 20; opacity: 0; pointer-events: none; transition: opacity .25s; }
+    .sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 21; transform: translateY(105%); transition: transform .3s ease; }
+    .show .sheet-bg { opacity: 1; pointer-events: auto; }
+    .show .sheet { transform: none; }
+    .sheet .in { max-width: 520px; margin: 0 auto; background: var(--paper); border-radius: 22px 22px 0 0; padding: 22px 20px calc(22px + env(safe-area-inset-bottom)); box-shadow: 0 -10px 40px rgba(0,0,0,.12); }
+    .sheet .app-row { display: flex; gap: 14px; align-items: center; }
+    .sheet .app-row img { width: 58px; height: 58px; border-radius: 14px; border: 1px solid var(--line); }
+    .sheet h3 { font-family: var(--script); font-style: normal; font-weight: 400; font-size: 1.35rem; color: var(--driftwood-deep); line-height: 1.2; }
+    .sheet .sub { font-size: 0.84rem; color: var(--ink-soft); }
+    .sheet ol { list-style: none; margin-top: 16px; counter-reset: s; }
+    .sheet ol li { counter-increment: s; display: flex; gap: 12px; align-items: center; padding: 10px 0; border-top: 1px solid var(--line); font-size: 0.9rem; }
+    .sheet ol li::before { content: counter(s); width: 24px; height: 24px; border-radius: 50%; background: var(--sand); color: var(--driftwood-dark); font-size: .75rem; font-weight: 700; display: grid; place-items: center; flex-shrink: 0; }
+    .sheet ol svg { width: 20px; height: 20px; stroke: #2f7cf6; vertical-align: -4px; }
+    .sheet .later { display: block; width: 100%; text-align: center; margin-top: 10px; padding: 10px; font-size: 0.84rem; color: var(--ink-soft); }
+    .ios-arrow { text-align: center; margin-top: 8px; font-size: 0.75rem; color: var(--ink-soft); }
+
+    .updates { display: flex; gap: 14px; align-items: flex-start; }
+    .updates .bell { width: 40px; height: 40px; border-radius: 50%; background: var(--sand); display: grid; place-items: center; flex-shrink: 0; }
+    .updates .bell svg { width: 20px; height: 20px; stroke: var(--driftwood-deep); }
+    .updates b { display: block; font-size: 0.95rem; }
+    .updates p { font-size: 0.82rem; color: var(--ink-soft); }
+    .updates .on-note { color: var(--done); font-weight: 700; font-size: 0.85rem; margin-top: 6px; }
+
+    section[data-page] { display: none; }
+    section[data-page].on { display: block; animation: fade .25s ease; }
+    @keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+    svg { fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ===== "Umph" layer: depth, warm accent, motion (2026-11-11) ===== */
+    :root {
+      --oil: #0f0f0f;
+      --accent: #b8744f;          /* warm copper: pairs with Driftwood */
+      --accent-soft: #f4e4d8;
+      --shadow: 0 1px 2px rgba(60, 40, 30, .04), 0 8px 24px rgba(60, 40, 30, .07);
+      --shadow-lift: 0 2px 4px rgba(60, 40, 30, .06), 0 14px 32px rgba(60, 40, 30, .12);
+    }
+    html, body { background: radial-gradient(120% 60% at 50% -10%, #f1e6dc 0%, var(--paper) 55%) fixed, var(--paper); }
+    header { border-bottom: 0; position: relative; }
+    header::after { content: ""; position: absolute; bottom: 0; left: 50%; width: 56px; height: 2px; margin-left: -28px; border-radius: 2px; background: linear-gradient(90deg, var(--driftwood), var(--accent)); }
+
+    h1 { font-size: 2.55rem; line-height: 1.08; color: var(--oil); letter-spacing: .005em; }
+    h2 { color: var(--oil); font-size: 1.6rem; display: flex; align-items: center; gap: 10px; }
+    h2::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--line), transparent); }
+    .lede { font-size: 1rem; }
+
+    .card { border: 0; border-radius: 20px; box-shadow: var(--shadow); }
+
+    /* Deal card: dark hero */
+    #deal-card {
+      position: relative; overflow: hidden; color: #fff; padding: 22px 20px;
+      background: linear-gradient(135deg, #1c1714 0%, #3a2f29 60%, #5e4a3e 100%);
+      box-shadow: 0 16px 36px rgba(40, 25, 18, .28);
+    }
+    #deal-card::before { content: ""; position: absolute; right: -60px; top: -60px; width: 180px; height: 180px; border-radius: 50%; background: radial-gradient(circle, rgba(184, 116, 79, .45), transparent 70%); }
+    #deal-card .eyebrow { color: #d9c6b8 !important; }
+    #deal-card .progress-head b { font-size: 1.2rem; display: block; margin-top: 4px; }
+    #deal-card .bar { height: 8px; background: rgba(255, 255, 255, .14); margin-top: 16px; }
+    #deal-card .bar i { background: linear-gradient(90deg, #d9b79f, var(--accent)); box-shadow: 0 0 12px rgba(214, 150, 110, .7); animation: grow 1.1s cubic-bezier(.2, .8, .2, 1) both .2s; transform-origin: left; }
+    #deal-card .countdown { color: #d9c6b8; }
+    #deal-card .countdown strong { color: #fff; font-size: 1.05rem; }
+    @keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+    /* Tiles */
+    .tile { border: 0; border-radius: 20px; box-shadow: var(--shadow); transition: transform .2s, box-shadow .2s; }
+    .tile:hover { transform: translateY(-2px); box-shadow: var(--shadow-lift); }
+    .tile svg { width: 40px; height: 40px; padding: 9px; border-radius: 12px; background: var(--accent-soft); stroke: var(--accent); }
+    .tile.primary { background: linear-gradient(140deg, #cf9370 0%, var(--accent) 45%, #8e5134 100%); box-shadow: 0 12px 28px rgba(142, 81, 52, .35); }
+    .tile.primary span { color: #fbeee5; }
+    .tile.primary svg { background: rgba(255, 255, 255, .18); stroke: #fff; }
+
+    /* Buttons */
+    .btn-dark { background: linear-gradient(135deg, #2b2320, #4a3b33); box-shadow: 0 8px 20px rgba(40, 25, 18, .28); transition: transform .15s, box-shadow .15s; }
+    .btn-dark:active { transform: scale(.98); }
+    .btn-line { background: #fff; border-color: var(--line); box-shadow: var(--shadow); }
+    .btn-line svg { stroke: var(--accent); }
+
+    /* Lists, chips, icons */
+    .icon-btn { border: 0; background: var(--accent-soft); }
+    .icon-btn svg { stroke: var(--accent); }
+    .chip { background: var(--accent-soft); color: #8a4f30; font-weight: 700; }
+    .updates .bell { background: var(--accent-soft); }
+    .updates .bell svg { stroke: var(--accent); animation: ring 3.5s ease-in-out infinite 1s; transform-origin: 50% 20%; }
+    @keyframes ring { 0%, 86%, 100% { transform: rotate(0); } 89% { transform: rotate(14deg); } 92% { transform: rotate(-12deg); } 95% { transform: rotate(8deg); } }
+
+    /* Steps */
+    li.now .dot { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 0 5px var(--accent-soft); animation: pulse 2.2s ease-out infinite; }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(184, 116, 79, .45), 0 0 0 5px var(--accent-soft); } 70% { box-shadow: 0 0 0 12px rgba(184, 116, 79, 0), 0 0 0 5px var(--accent-soft); } 100% { box-shadow: 0 0 0 0 rgba(184, 116, 79, 0), 0 0 0 5px var(--accent-soft); } }
+    li.done::before { background: var(--done) !important; width: 2px !important; left: 10.5px !important; }
+    p.todo { background: var(--accent-soft); border-left: 3px solid var(--accent); }
+    .key-dates b { color: var(--accent); }
+    .seg { background: #fff; box-shadow: var(--shadow); }
+    .seg button.on { background: var(--oil); color: #fff; }
+
+    /* Tab bar */
+    nav.tabs { background: rgba(255, 255, 255, .9); border-top: 0; box-shadow: 0 -6px 24px rgba(60, 40, 30, .08); }
+    nav.tabs a.on { color: var(--accent); }
+    nav.tabs a.on svg { background: var(--accent-soft); border-radius: 10px; padding: 3px; width: 30px; height: 26px; margin-top: -2px; }
+
+    /* Rise-in on page change */
+    section[data-page].on > * { animation: rise .45s cubic-bezier(.2, .8, .2, 1) both; }
+    section[data-page].on > *:nth-child(2) { animation-delay: .04s; }
+    section[data-page].on > *:nth-child(3) { animation-delay: .08s; }
+    section[data-page].on > *:nth-child(4) { animation-delay: .12s; }
+    section[data-page].on > *:nth-child(5) { animation-delay: .16s; }
+    section[data-page].on > *:nth-child(n+6) { animation-delay: .2s; }
+    @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+  </style>
+</head>
+<body>
+  <!-- Icon set -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/></symbol>
+    <symbol id="i-path" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.5 6H15a3 3 0 0 1 0 6H9a3 3 0 0 0 0 6h6.5"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 4.5A1.5 1.5 0 0 1 5.5 3H20v15H5.5A1.5 1.5 0 0 0 4 19.5z"/><path d="M4 19.5A1.5 1.5 0 0 0 5.5 21H20v-3"/></symbol>
+    <symbol id="i-people" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"/></symbol>
+    <symbol id="i-tool" viewBox="0 0 24 24"><path d="M14.5 6.5a4 4 0 0 0 5 5L21 13l-8 8-3-3 8-8z" transform="rotate(0)"/><path d="M3 21l6-6"/><path d="M9.5 9.5 4 4"/></symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 6.5A1.5 1.5 0 0 1 4.5 5H9l2 2.5h8.5A1.5 1.5 0 0 1 21 9v9.5a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18.5z"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.8A8 8 0 1 1 21 12z"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.8-4.4 4.3 1 6.1L12 17l-5.4 2.8 1-6.1-4.4-4.3 6.1-.8z"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></symbol>
+    <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-9-9.3C2 7 4.4 4 7.6 4c2 0 3.3 1.1 4.4 2.6C13.1 5.1 14.4 4 16.4 4 19.6 4 22 7 21 10.7 19.5 15.4 12 20 12 20z"/></symbol>
+  </svg>
+
+  <div class="wrap">
+    <header>
+      <img src="assets/blockwest-logo.svg" alt="Block West Group" />
+      <div class="who"><b>Melissa Patterson</b> · eXp Realty</div>
+    </header>
+
+    <!-- HOME -->
+    <section data-page="home">
+      <h1 id="hello">Welcome home</h1>
+      <p class="lede" id="hello-sub">Everything for your move, all in one place.</p>
+
+      <div class="card" id="deal-card" hidden>
+        <div class="progress-head">
+          <div><div class="eyebrow" id="deal-kind">Your purchase</div><b id="deal-stage"></b></div>
+          <a href="#deal" class="eyebrow" style="color:var(--driftwood-dark)">Details →</a>
+        </div>
+        <div class="bar"><i id="deal-bar"></i></div>
+        <div class="countdown" id="deal-countdown"></div>
+      </div>
+
+      <div class="grid">
+        <a class="tile primary" id="t-msg" href="#">
+          <svg><use href="#i-chat"/></svg><b>Message Melissa</b><span>Text me anytime</span>
+        </a>
+        <a class="tile" id="t-docs" href="#" target="_blank" rel="noopener">
+          <svg><use href="#i-folder"/></svg><b>My Documents</b><span id="t-docs-sub">Your contracts and paperwork</span>
+        </a>
+        <a class="tile" id="t-cal" href="#deal-dates">
+          <svg><use href="#i-cal"/></svg><b>Calendar</b><span>Key dates + book a time</span>
+        </a>
+        <a class="tile" id="t-search" href="#" target="_blank" rel="noopener">
+          <svg><use href="#i-search"/></svg><b>Search Homes</b><span>Save favorites and I'll see them</span>
+        </a>
+      </div>
+
+      <div class="card updates" id="updates-card" hidden>
+        <div class="bell"><svg><use href="#i-bell"/></svg></div>
+        <div style="flex:1">
+          <b>Deal updates</b>
+          <p id="updates-text">Get a notification for every update on your deal, plus a reminder before each key date.</p>
+          <button class="btn btn-dark" id="updates-btn" style="margin-top:12px"><svg><use href="#i-bell"/></svg>Turn on updates</button>
+          <div class="on-note" id="updates-on" hidden>✓ Updates are on</div>
+        </div>
+      </div>
+
+      <h2>Helpful for you</h2>
+      <div class="card list" style="padding-top:4px;padding-bottom:4px">
+        <a class="item" href="#" id="install-link" hidden style="text-decoration:none">
+          <div class="icon-btn"><svg><use href="#i-plus"/></svg></div>
+          <div class="meta"><b>Add this app to your phone</b><span>One tap to get back here anytime</span></div>
+        </a>
+        <a class="item" href="#guides" style="text-decoration:none">
+          <div class="icon-btn"><svg><use href="#i-book"/></svg></div>
+          <div class="meta"><b>Buyer &amp; seller guides</b><span>How it all works, step by step</span></div>
+        </a>
+        <a class="item" href="#vendors" style="text-decoration:none">
+          <div class="icon-btn"><svg><use href="#i-people"/></svg></div>
+          <div class="meta"><b>My trusted vendors</b><span>Lender, title, contractors and more</span></div>
+        </a>
+        <a class="item" href="#home-care" style="text-decoration:none">
+          <div class="icon-btn"><svg><use href="#i-tool"/></svg></div>
+          <div class="meta"><b>Home care</b><span>Seasonal checklist for Colorado homes</span></div>
+        </a>
+      </div>
+    </section>
+
+    <!-- MY DEAL -->
+    <section data-page="deal">
+      <h1 id="deal-title">My Deal</h1>
+      <p class="lede" id="deal-lede">Here's where we are and what comes next.</p>
+
+      <div class="seg" id="deal-switch" hidden>
+        <button data-k="buyer">Buying</button><button data-k="seller">Selling</button>
+      </div>
+
+      <div class="card" id="steps-card"><ol class="steps" id="steps"></ol></div>
+
+      <h2 id="deal-dates">Calendar</h2>
+      <div class="card">
+        <div id="close-line" class="countdown" style="margin-top:0"></div>
+        <ul id="key-dates" class="key-dates" hidden></ul>
+        <div id="cal-btns"></div>
+        <a class="btn btn-line" id="book-btn" href="#" target="_blank" rel="noopener"><svg><use href="#i-cal"/></svg>Book a time with me</a>
+        <p class="note" id="cal-note"></p>
+      </div>
+
+      <h2>Documents</h2>
+      <div class="card">
+        <p class="lede" style="font-size:.88rem">All of your contracts, disclosures and closing papers live in your private Google Drive folder. Only you and I can open it.</p>
+        <a class="btn btn-dark" id="docs-btn" href="#" target="_blank" rel="noopener"><svg><use href="#i-folder"/></svg>Open my documents</a>
+      </div>
+    </section>
+
+    <!-- GUIDES -->
+    <section data-page="guides">
+      <h1>Guides</h1>
+      <p class="lede">The whole process, start to finish, in plain language.</p>
+      <div class="seg" id="guide-switch">
+        <button data-g="buyer" class="on">Buying</button><button data-g="seller">Selling</button><button data-g="after">After closing</button>
+      </div>
+      <div class="card" id="guide-body" style="padding-top:4px;padding-bottom:4px"></div>
+      <div class="row2">
+        <a class="btn btn-line" id="g-buyer-pdf" href="#" target="_blank" rel="noopener"><svg><use href="#i-book"/></svg>Buyer's Guide</a>
+        <a class="btn btn-line" id="g-reloc-pdf" href="#" target="_blank" rel="noopener"><svg><use href="#i-book"/></svg>Relocation Guide</a>
+      </div>
+    </section>
+
+    <!-- VENDORS -->
+    <section data-page="vendors">
+      <h1>Trusted vendors</h1>
+      <p class="lede">People I've worked with and trust with my own clients. Tell them I sent you.</p>
+      <div class="card" id="vendor-list" style="padding-top:4px;padding-bottom:4px"></div>
+      <p class="note">Need someone who isn't listed? Message me and I'll connect you.</p>
+    </section>
+
+    <!-- HOME CARE -->
+    <section data-page="home-care">
+      <h1>Home care</h1>
+      <p class="lede">A simple seasonal checklist for Northern Colorado homes. Your checkmarks save on this phone.</p>
+      <div class="seg" id="season-switch">
+        <button data-s="spring">Spring</button><button data-s="summer">Summer</button><button data-s="fall">Fall</button><button data-s="winter">Winter</button>
+      </div>
+      <div class="card" id="season-list" style="padding-top:4px;padding-bottom:4px"></div>
+
+      <h2>Your home's value</h2>
+      <div class="card">
+        <p class="lede" style="font-size:.88rem">Curious what your home is worth today? I'll send you a free, no-pressure value update.</p>
+        <a class="btn btn-dark" id="value-btn" href="#" target="_blank" rel="noopener"><svg><use href="#i-home"/></svg>Get a home value update</a>
+      </div>
+
+      <h2>Love working together?</h2>
+      <div class="card">
+        <p class="lede" style="font-size:.88rem">The biggest compliment is a review or an introduction to a friend who's thinking about a move.</p>
+        <div class="row2">
+          <a class="btn btn-line" id="review-btn" href="#" target="_blank" rel="noopener"><svg><use href="#i-star"/></svg>Leave a review</a>
+          <a class="btn btn-line" id="refer-btn" href="#"><svg><use href="#i-heart"/></svg>Refer a friend</a>
+        </div>
+      </div>
+    </section>
+
+    <footer id="foot"></footer>
+  </div>
+
+  <!-- Add to Home Screen prompt -->
+  <div id="install">
+    <div class="sheet-bg" id="install-bg"></div>
+    <div class="sheet" role="dialog" aria-labelledby="install-title">
+      <div class="in">
+        <div class="app-row">
+          <img src="assets/icon-180.png" alt="" />
+          <div><h3 id="install-title">Add Block West to your phone</h3><div class="sub">Your documents, dates and updates, one tap away. It's free.</div></div>
+        </div>
+        <ol id="install-ios">
+          <li><span>Tap the Share button <svg><use href="#i-share"/></svg> in Safari's toolbar</span></li>
+          <li><span>Scroll down and tap <b>Add to Home Screen</b> <svg><use href="#i-plus"/></svg></span></li>
+          <li><span>Tap <b>Add</b>, then open the app from your home screen</span></li>
+        </ol>
+        <div id="install-android" hidden>
+          <button class="btn btn-dark" id="install-go"><svg><use href="#i-plus"/></svg>Install the app</button>
+        </div>
+        <button class="later" id="install-later">Maybe later</button>
+      </div>
+    </div>
+  </div>
+
+  <nav class="tabs" aria-label="Main">
+    <div class="in">
+      <a href="#home" data-tab="home"><svg><use href="#i-home"/></svg>Home</a>
+      <a href="#deal" data-tab="deal"><svg><use href="#i-path"/></svg>My Deal</a>
+      <a href="#guides" data-tab="guides"><svg><use href="#i-book"/></svg>Guides</a>
+      <a href="#vendors" data-tab="vendors"><svg><use href="#i-people"/></svg>Vendors</a>
+      <a href="#home-care" data-tab="home-care"><svg><use href="#i-tool"/></svg>Home Care</a>
+    </div>
+  </nav>
+
+  <script src="config.js?v=2026-11-11e"></script>
+  <script src="app.js?v=2026-11-11"></script>
+</body>
+</html>
