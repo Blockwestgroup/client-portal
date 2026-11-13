@@ -198,6 +198,10 @@
       --shadow-lift: 0 2px 4px rgba(60, 40, 30, .06), 0 14px 32px rgba(60, 40, 30, .12);
     }
     html, body { background: radial-gradient(120% 60% at 50% -10%, #f1e6dc 0%, var(--paper) 55%) fixed, var(--paper); }
+    /* BW monogram watermark for depth */
+    body::before { content: ""; position: fixed; z-index: 0; pointer-events: none; right: -110px; top: 150px; width: min(118vw, 520px); aspect-ratio: 807 / 714; background: url("assets/bw-watermark.svg") no-repeat center / contain; transform: rotate(-8deg); }
+    :where(body > *) { position: relative; z-index: 1; }
+    .card, .tile:not(.primary) { background: rgba(255, 255, 255, .78); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
     header { border-bottom: 0; position: relative; }
     header::after { content: ""; position: absolute; bottom: 0; left: 50%; width: 56px; height: 2px; margin-left: -28px; border-radius: 2px; background: linear-gradient(90deg, var(--driftwood), var(--accent)); }
 
