@@ -31,7 +31,7 @@ window.APP_CONFIG = {
   // Deal update notifications. Free OneSignal account: paste its App ID here
   // once the app is online (OneSignal → Settings → Keys & IDs).
   notifications: {
-    oneSignalAppId: "", // TODO after the app is live on GitHub Pages
+    oneSignalAppId: "5bb0af65-0724-49a4-a2c6-f5eb95079354", // OneSignal app "Block West Group App" (clients.blockwestgroup.com)
   },
 
   // Your trusted vendors, from the Home Buyer's Guide ("Meet the Team" and
